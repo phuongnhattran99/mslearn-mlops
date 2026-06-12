@@ -1,6 +1,6 @@
 from azure.identity import DefaultAzureCredential
 from azure.ai.ml import MLClient
-from azure.ai.ml.entities import ManagedOnlineEndpoint, ManagedOnlineDeployment, Model
+from azure.ai.ml.entities import ManagedOnlineEndpoint, ManagedOnlineDeployment, Model, Environment  
 from azure.ai.ml.constants import AssetTypes
 
 import argparse
@@ -57,11 +57,34 @@ def create_or_update_deployment(
         description="MLflow diabetes classification model",
     )
 
+    # ✅ Thêm environment Python 3.10 thay vì dùng conda.yaml cũ
+    env = Environment(
+        image="mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04",
+        conda_file={
+            "name": "diabetes-deploy-env",
+            "channels": ["defaults"],
+            "dependencies": [
+                "python=3.10",
+                "pip",
+                {"pip": [
+                    "azureml-defaults",  # bắt buộc phải có
+                    "mlflow",
+                    "scikit-learn",
+                    "pandas",
+                    "numpy",
+                ]}
+            ]
+        },
+        name="diabetes-deploy-env",
+        version="1",
+    )    
+    
     deployment = ManagedOnlineDeployment(
         name=deployment_name,
         endpoint_name=endpoint_name,
         model=model,
-        instance_type="Standard_D2as_v4",
+        environment=env,  
+        instance_type="STANDARD_E2D_V4",
         instance_count=1,
     )
 
