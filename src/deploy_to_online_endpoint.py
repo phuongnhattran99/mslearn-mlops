@@ -84,7 +84,7 @@ def create_or_update_deployment(
         endpoint_name=endpoint_name,
         model=model,
         environment=env,  
-        instance_type="STANDARD_E2D_V4",
+        instance_type="Standard_D4ads_v5",
         instance_count=1,
     )
 
