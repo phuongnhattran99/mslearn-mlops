@@ -35,6 +35,16 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      # ── Thêm bước này vào TRƯỚC bước deploy ──────────────
+      - name: Register required resource providers
+        run: |
+          az provider register --namespace Microsoft.PolicyInsights --wait
+          az provider register --namespace Microsoft.Cdn --wait
+          az provider register --namespace Microsoft.MachineLearningServices --wait
+          az provider register --namespace Microsoft.Network --wait
+          az provider register --namespace Microsoft.ContainerRegistry --wait
+          echo "All providers registered successfully"          
+
       - name: Install Azure ML CLI
         run: |
           az extension add -n ml -y
