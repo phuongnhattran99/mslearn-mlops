@@ -46,45 +46,25 @@ def ensure_endpoint(ml_client: MLClient, endpoint_name: str) -> ManagedOnlineEnd
         return ml_client.begin_create_or_update(endpoint).result()
 
 
+# deploy_to_online_endpoint.py — phần create_or_update_deployment
+
 def create_or_update_deployment(
     ml_client: MLClient,
     endpoint_name: str,
     deployment_name: str,
 ) -> ManagedOnlineDeployment:
+
     model = Model(
         path="./model",
         type=AssetTypes.MLFLOW_MODEL,
         description="MLflow diabetes classification model",
     )
 
-    # ✅ Thêm environment Python 3.10 thay vì dùng conda.yaml cũ
-    env = Environment(
-        image="mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04",
-        conda_file={
-            "name": "diabetes-deploy-env",
-            "channels": ["defaults"],
-            "dependencies": [
-                "python=3.10",
-                "pip",
-                {"pip": [
-                    "azureml-defaults",  # bắt buộc phải có
-                    "mlflow",
-                    "scikit-learn",
-                    "pandas",
-                    "numpy",
-                ]}
-            ]
-        },
-        name="diabetes-deploy-env",
-        version="1",
-    )    
-    
     deployment = ManagedOnlineDeployment(
         name=deployment_name,
         endpoint_name=endpoint_name,
-        model=model,
-        environment="azureml://registries/azureml/environments/mlflow-py312-inference/versions/39",  
-        instance_type="Standard_D2as_v4",
+        model=model,                       # Azure ML tự đọc model/conda.yaml
+        instance_type="Standard_D2as_v4",  # ← fix format
         instance_count=1,
     )
 
