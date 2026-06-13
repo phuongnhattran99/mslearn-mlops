@@ -84,7 +84,7 @@ def create_or_update_deployment(
         endpoint_name=endpoint_name,
         model=model,
         environment="azureml://registries/azureml/environments/mlflow-py312-inference/versions/39",  
-        instance_type="STANDARD_D2A_V4",
+        instance_type="Standard_D2as_v4",
         instance_count=1,
     )
 
