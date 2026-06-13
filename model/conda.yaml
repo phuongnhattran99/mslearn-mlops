@@ -1,14 +1,14 @@
-# model/conda.yaml — phải sửa song song
+# model/conda.yaml
 channels:
   - conda-forge
 dependencies:
-  - python=3.10              # ← bỏ 3.7.15, dùng 3.10 cho nhất quán
+  - python=3.10
   - pip
   - pip:
-    - mlflow==1.30.0
-    - cloudpickle==2.2.0
-    - psutil==5.8.0
-    - scikit-learn==0.24.1   # ← giữ nguyên để load model.pkl đúng
-    - azureml-inference-server-http
-    - azureml-ai-monitoring
+      - mlflow==1.30.0
+      - cloudpickle==2.2.0
+      - psutil==5.8.0
+      - scikit-learn==0.24.1          # ← khớp với model.pkl
+      - azureml-inference-server-http
+      - azureml-ai-monitoring
 name: mlflow-env
